@@ -6,6 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Use Node.js 16.x
         uses: actions/setup-node@v3
         with:
@@ -16,9 +18,11 @@ jobs:
       - name: pnpm install, build
         run: |
           pnpm install
-      - name: run Lighthouse CI
+      - name: install Lighthouse CI
         run: |
           pnpm add -g @lhci/cli@0.11.x
+      - name: run Lighthouse CI
+        run: |
           lhci autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
